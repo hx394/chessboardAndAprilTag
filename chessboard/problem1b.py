@@ -16,7 +16,7 @@ object_points_list = []  # 3D points in real world space
 image_points_list = []   # 2D points in image plane
 
 # Load images
-image_paths = glob.glob("C:/Users/rain_/Desktop/chessboard/originals/*.JPEG")  # Update with the correct path
+image_paths = glob.glob("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard/originals/*.JPEG")  # Update with the correct path
 
 # Loop over all images to detect chessboard corners
 for image_path in image_paths:
