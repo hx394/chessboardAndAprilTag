@@ -2,7 +2,7 @@ import cv2
 import apriltag
 
 # Load the image in grayscale
-image = cv2.imread("frame_0.jpg", cv2.IMREAD_GRAYSCALE)
+image = cv2.imread("chessboard/frame_0.jpg", cv2.IMREAD_GRAYSCALE)
 
 # Initialize the AprilTag detector
 detector = apriltag.Detector()
