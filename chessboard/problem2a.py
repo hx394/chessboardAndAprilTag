@@ -2,13 +2,15 @@ import cv2
 import apriltag
 
 # Load the image in grayscale
-image = cv2.imread("chessboard/frame_0.jpg", cv2.IMREAD_GRAYSCALE)
+image = cv2.imread("chessboard/frame_0.jpg")
+
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Initialize the AprilTag detector
 detector = apriltag.Detector()
 
 # Detect tags in the image
-tags = detector.detect(image)
+tags = detector.detect(gray)
 
 # Check if any tags were found
 if not tags:
