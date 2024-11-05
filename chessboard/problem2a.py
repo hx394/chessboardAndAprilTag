@@ -2,7 +2,7 @@ import cv2
 import apriltag
 
 # Load the image in grayscale
-image = cv2.imread("chessboard/frame_0.jpg")
+image = cv2.imread("chessboard/frame/frame_0.jpg")
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 

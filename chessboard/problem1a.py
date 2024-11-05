@@ -7,7 +7,7 @@ print("Current working directory:", os.getcwd())
 chessboard_size = (8, 6)
 
 # Load the image
-image = cv2.imread("C:/Users/rain_/Desktop/chessboard/IMG_3917.JPEG")
+image = cv2.imread("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard/originals/IMG_3918.JPEG")
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
