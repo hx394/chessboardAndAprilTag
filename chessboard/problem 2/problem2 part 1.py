@@ -24,10 +24,11 @@ else:
             
             # Extract the corners of the tag
             corners_2D = tag.corners
+            
             print("Corner coordinates (in image coordinates):")
             
             for i, corner in enumerate(corners_2D):
-                print(f"Corner {i}: (x={corner[0]}, y={corner[1]})")
+                print(f"Corner {(3-i)}: (x={corner[0]}, y={corner[1]})")
                 cv2.circle(image, (int(corner[0]), int(corner[1])), 10, (255, 0, 0), 5)
                 
             
