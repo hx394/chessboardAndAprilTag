@@ -8,12 +8,12 @@ import os
 
 
 # Known 3D coordinates of the points in the world (e.g., in meters)
-world_points = [
-    gtsam.Point3(-0.005, -0.005, 0),  # Lower-left corner
-    gtsam.Point3(0.005, -0.005, 0),   # Lower-right corner
-    gtsam.Point3(0.005, 0.005, 0),    # Upper-right corner
-    gtsam.Point3(-0.005, 0.005, 0)    # Upper-left corner
-]
+world_points = np.array([
+    [-0.005, -0.005, 0],  # Lower-left corner
+    [0.005, -0.005, 0],   # Lower-right corner
+    [0.005, 0.005, 0],    # Upper-right corner
+    [-0.005, 0.005, 0]  ]  # Upper-left corner
+, dtype=np.float32)
 
 # Detected 2D points in the image (pixel coordinates)
 image_points = np.array([
@@ -28,7 +28,7 @@ fx, fy, s, px, py = 1467.34104, 1462.30880, 0, 545.234279, 943.926077
 # Replace with your actual values from calibration
 
 # Initialize camera calibration in GTSAM
-K = gtsam.Cal3_S2(fx, fy, s, px, py)
+K = np.array([[fx,0,px],[0,fy,py],[0,0,1]],dtype=np.float32)
 
 # Camera intrinsic parameters (from calibration)
 camera_matrix = K
@@ -44,10 +44,11 @@ if success:
     print("Rotation Vector:\n", rotation_vector)
     print("Translation Vector:\n", translation_vector)
 
-
-
-    rotation=gtsam.Rot3(rotation_vector)
-    translation=gtsam.Point3(translation_vector)
+    rotation_matrix,_=cv2.Rodrigues(rotation_vector)
+    print("Rotation Matrix:\n",rotation_matrix)
+    
+    rotation=gtsam.Rot3(rotation_matrix)
+    translation=gtsam.Point3(translation_vector[0][0],translation_vector[1][0],translation_vector[2][0])
     pose=gtsam.Pose3(rotation,translation)
 
 
