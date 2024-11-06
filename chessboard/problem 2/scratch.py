@@ -99,7 +99,7 @@ rotation_matrix=np.array([
     [0,1,0],
     [0,0,1]
 ])
-translation_vector=np.array([10,20,100])
+translation_vector=np.array([10,10,10])
 rotation=gtsam.Rot3(rotation_matrix)
 translation=gtsam.Point3(translation_vector)
 pose_prior=gtsam.Pose3(rotation,translation)
@@ -108,11 +108,17 @@ initial_estimate.insert(X(0), pose_prior)
 #    [0.3,0.3,0.3,0.1,0.1,0.1]))
 #graph.push_back(gtsam.PriorFactorPose3(X(0),pose_prior,pose_noise))
 
-point_noise=gtsam.noiseModel.Isotropic.Sigma(3,0.1)
+point_noise=gtsam.noiseModel.Isotropic.Sigma(3,0.000001)
 # Insert 3D points (AprilTag corners) into initial estimate
 for i, point_3D in enumerate(points_3D):
-    initial_estimate.insert(L(i), point_3D)
-    graph.push_back(gtsam.PriorFactorPoint3(L(i),point_3D,point_noise))
+
+
+
+    aprilTagPoseNoise=gtsam.noiseModel.Diagonal.Sigmas(np.array(
+        [0.000001,0.000001,0.000001,0.000001,0.000001,0.000001]))
+    aprilTag_pose = gtsam.Pose3(gtsam.Rot3.RzRyRx(0, 0, 0), point_3D) 
+    initial_estimate.insert(L(i), aprilTag_pose)
+    graph.push_back(gtsam.PriorFactorPose3(L(i),aprilTag_pose,aprilTagPoseNoise))
 
 # noise_model2 = gtsam.noiseModel.Isotropic.Sigma(3, 1.0)
 

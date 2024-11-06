@@ -1,0 +1,295 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children no
+\language chinese-simplified
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008080
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Mobile Robotics Homework 3
+\end_layout
+
+\begin_layout Standard
+Hongzhen Xu
+\end_layout
+
+\begin_layout Standard
+Notes:
+ Because gtsam and apriltag libraries cannot be installed on my windows machine,
+\end_layout
+
+\begin_layout Standard
+this homework is finished with the virtual box linux os.
+\end_layout
+
+\begin_layout Standard
+When you run the codes,
+ please change the paths of the files in the code.
+\end_layout
+
+\begin_layout Section
+1
+\end_layout
+
+\begin_layout Standard
+The corners data for each image is in 8 txt files named [corners IMG XXXX.txt].
+\end_layout
+
+\begin_layout Standard
+The output images for each image with corners marked are in 8 jpg files 
+\end_layout
+
+\begin_layout Standard
+named [output_image(IMG_XXXX).jpg].
+\end_layout
+
+\begin_layout Standard
+IMG_3917 cannot be detected corners.
+ The other 7 images succeed.
+\end_layout
+
+\begin_layout Standard
+The codes for problem 1 are in [problem1 part 1.py] and [problem1 part 2.py] .
+\end_layout
+
+\begin_layout Standard
+The estimated parameters of the camera matrix K and other outputs are in
+\end_layout
+
+\begin_layout Standard
+the txt file named [calibration estimated parameters of the camera matrix K.txt].
+\end_layout
+
+\begin_layout Section
+2
+\end_layout
+
+\begin_layout Standard
+(a)
+\end_layout
+
+\begin_layout Standard
+The camera projection function 
+\begin_inset Formula $\pi(K,X,P_{i})$
+\end_inset
+
+ maps a 3D point 
+\begin_inset Formula $P_{i}$
+\end_inset
+
+ in 
+\begin_inset Formula $R^{3}$
+\end_inset
+
+ in the 
+\end_layout
+
+\begin_layout Standard
+world frame to a 2D point 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ in 
+\begin_inset Formula $R^{2}$
+\end_inset
+
+ in the image plane:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $u_{i}=\pi(K,X,P_{i})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where K is the camera matrix,
+ and X describes the rotation and translation 
+\end_layout
+
+\begin_layout Standard
+of the camera.
+\end_layout
+
+\begin_layout Standard
+The goal is to minimize the reprojection error,
+ which is the difference 
+\end_layout
+
+\begin_layout Standard
+between the observed 2D points u and their projections 
+\begin_inset Formula $\pi$
+\end_inset
+
+ based on the 
+\end_layout
+
+\begin_layout Standard
+estimated pose X.
+ 
+\end_layout
+
+\begin_layout Standard
+The reprojection error for a single point is:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $re_{i}=u_{i}-\pi(K,X,P_{i})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The PnP problem can then be formulated as a nonlinear least-squares 
+\end_layout
+
+\begin_layout Standard
+optimization problem:
+\end_layout
+
+\begin_layout Standard
+optimal X=
+\begin_inset Formula $argmin_{X}\sum_{i=1}^{N}||u_{i}-\pi(K,X,P_{i})||_{2}^{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where X is the variable to optimize (the camera's pose).
+\end_layout
+
+\begin_layout Standard
+The term 
+\begin_inset Formula $||u_{i}-\pi(K,X,P_{i})||_{2}^{2}$
+\end_inset
+
+ is the squared Euclidean distance (or 
+\begin_inset Formula $L_{2}$
+\end_inset
+
+ norm) 
+\end_layout
+
+\begin_layout Standard
+between the observed 2D point 
+\begin_inset Formula $u_{i}$
+\end_inset
+
+ and the predicted 2D point 
+\begin_inset Formula $\pi(K,X,P_{i})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+(b)
+\end_layout
+
+\begin_layout Standard
+Tag 0 corners are recorded in the file [Tag0corners.txt].
+\end_layout
+
+\begin_layout Standard
+Marked corners in the file [tag0corners.jpg].
+\end_layout
+
+\begin_layout Standard
+Estimated pose of camera is in [camera pose.txt].
+\end_layout
+
+\begin_layout Standard
+The codes for problem 2 are in [problem 2 part 1.py] and [problem2 part 2.py].
+\end_layout
+
+\begin_layout Standard
+scratches files are my previous attempts,
+ you can ignore them.
+\end_layout
+
+\end_body
+\end_document
