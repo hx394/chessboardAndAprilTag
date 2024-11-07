@@ -1,7 +1,9 @@
-import gtsam
-import numpy as np
 import cv2
 import apriltag
+import gtsam
+import gtsam.noiseModel
+import numpy as np
+import os
 
 R= [
         0.998356, -0.0376212, 0.0432434,
@@ -10,14 +12,23 @@ R= [
 ]
 t=[  0.0135327, -0.0275992 , 0.0834204]
 
+def X(i):
+    return gtsam.symbol('x',i)
+
+def L(j):
+    return int(gtsam.symbol('o',j))
+def P(k):
+    return int(gtsam.symbol('p',k))
+
+print("Current working directory:", os.getcwd())
+
 # Load the calibration matrix from Problem 1 results
 fx, fy, s, px, py = 1467.34104, 1462.30880, 0, 545.234279, 943.926077  
 # Replace with your actual values from calibration
 
 # Initialize camera calibration in GTSAM
 K = gtsam.Cal3_S2(fx, fy, s, px, py)
-
-
+#print(K)
 # Load image and detect AprilTag
 image = cv2.imread('chessboard/frame/frame_0.jpg', cv2.IMREAD_GRAYSCALE)
 detector = apriltag.Detector()
@@ -48,57 +59,75 @@ points_3D = [
     gtsam.Point3(-0.005, 0.005, 0)    # Upper-left corner
 ]
 
-# define the camera observation noise model
-measurement_noise = gtsam.noiseModel.Isotropic.Sigma(2, 1.0)
- 
-# create factor graph
+
+
+# Set up GTSAM factor graph
 graph = gtsam.NonlinearFactorGraph()
- 
-# get tag 0 corners in the first image
-tag_0_corners = observed_2D#cpe.apriltag_corners['x0'][0]
-corners_world = points_3D#gtg.landmark_ground_truth[0][0]
- 
-#print(corners_world)
-#print(tag_0_corners)
- 
-# add a noise to world corners
-#corners_world = corners_world + np.random.normal(0, 0.1, corners_world.shape)
-#for i in range(len(corners_world)):
-#    corners_world[i] = corners_world[i] + np.random.normal(0, 0.1)
-#corners_world = corners_world + np.random.normal(0, 0.1)
- 
-# init values
-initial_values = gtsam.Values()
- 
-# add measurement factor to the graph for each corner of the apriltag
-for i in range(len(tag_0_corners)):
-    graph.add(gtsam.GenericProjectionFactorCal3_S2(gtsam.Point2(tag_0_corners[i][0], tag_0_corners[i][1]), measurement_noise, gtsam.symbol('x', 0), gtsam.symbol('l', (0*10)+(i+1)), K))
-    initial_values.insert(gtsam.symbol('l', (0*10)+(i+1)), gtsam.Point3(corners_world[i]))
- 
-# set prior factor on the camera pose
-prior_noise_model = gtsam.noiseModel.Diagonal.Sigmas(np.array([1, 1, 1, 1, 1, 1]))
-#graph.add(gtsam.PriorFactorPose3(gtsam.symbol('x', 0), gtsam.Pose3(gtsam.Rot3.Rodrigues(cpe.camera_pose['x0'][0,:]), gtsam.Point3(cpe.camera_pose['x0'][1,:])), prior_noise_model))
-graph.add(gtsam.PriorFactorPose3(gtsam.symbol('x', 0), gtsam.Pose3(gtsam.Rot3(*R),gtsam.Point3(*t)), prior_noise_model))
-# initial value for camera pose
-#initial_values.insert(gtsam.symbol('x', 0), gtsam.Pose3(gtsam.Rot3.Rodrigues(cpe.camera_pose['x0'][0,:]), gtsam.Point3(cpe.camera_pose['x0'][1,:])))
-initial_values.insert(gtsam.symbol('x',0),gtsam.Pose3(gtsam.Rot3(*R),gtsam.Point3(*t)))
-# save poses from graph before optimization
-landmarks = []
+initial_estimate = gtsam.Values()
+
+
+# Define noise model for the projection factors
+measurement_noise = gtsam.noiseModel.Isotropic.Sigma(2, 1.0)  # Example: standard deviation of 1 pixel
+
+
+pose_prior=gtsam.Pose3(gtsam.Rot3(*R),gtsam.Point3(*t))
+initial_estimate.insert(X(0), pose_prior)
+pose_noise=gtsam.noiseModel.Diagonal.Sigmas(np.array(
+    [1,1,1,1,1,1]))
+graph.push_back(gtsam.PriorFactorPose3(X(0),pose_prior,pose_noise))
+
 point_noise=gtsam.noiseModel.Isotropic.Sigma(3,0.000001)
-for i in range(4):
-    landmarks.append(initial_values.atPoint3(gtsam.symbol('l', (0*10)+(i+1))))
+# Insert 3D points (AprilTag corners) into initial estimate
+for i, point_3D in enumerate(points_3D):
+
+
+
     
-    factor=gtsam.PriorFactorPoint3(gtsam.symbol('l', (0*10)+(i+1)),landmarks[i],point_noise)
-    #initial_estimate.insert(P(i),landmarks[i])
+    factor=gtsam.PriorFactorPoint3(P(i),point_3D,point_noise)
+    initial_estimate.insert(P(i),point_3D)
     graph.push_back(factor)
-camera_pose = initial_values.atPose3(gtsam.symbol('x', 0))
+    
+# Add projection factors for each corner point
+
+# Define noise models
+
+
+for i, (point_3D, point_2D) in enumerate(zip(points_3D, observed_2D)):
+    
  
- 
- 
-# optimize the graph
-params = gtsam.LevenbergMarquardtParams()
+    
+     factor=gtsam.GenericProjectionFactorCal3_S2(point_2D, measurement_noise, X(0), P(i), K)
+    
+     graph.push_back(factor)
+    
+
+
+# Provide an initial estimate for the camera pose
+#initial_pose = gtsam.Pose3(gtsam.Rot3(), gtsam.Point3(0, 0, 0.5))  # Guess the camera is 0.5 meters in front of the tag
+#initial_pose = gtsam.Pose3(gtsam.Rot3.RzRyRx(0.1, -0.1, 0.1), gtsam.Point3(0.1, 0.1, 1.0))  # Vary initial estimate
+#initial_estimate.insert(gtsam.symbol('x', 0), initial_pose)
+#print("graph:")
+#print(graph)
+print("initial estimate:")
+print(initial_estimate)
+#initial_error = graph.error(initial_estimate)
+#print("Initial error before optimization:", initial_error)
+# Optimize the factor graph using Levenberg-Marquardt optimizer
+params=gtsam.LevenbergMarquardtParams()
 #params.setVerbosityLM("SUMMARY")
-#print(camera_pose)
-optimizer = gtsam.LevenbergMarquardtOptimizer(graph, initial_values, params)
+#params.setVerbosity("TERMINATION") 
+#params.setVerbosityLM("TRYDELTA") 
+optimizer = gtsam.LevenbergMarquardtOptimizer(graph, initial_estimate,params)
+
+#optimizer=gtsam.DoglegOptimizer(graph,initial_estimate)
 result = optimizer.optimize()
-print(result)
+
+
+
+#print("result:")
+#print(result)
+# Extract and print the optimized camera pose relative to AprilTag
+camera_pose = result.atPose3(X(0))
+print("Estimated camera pose relative to AprilTag:")
+print(camera_pose)
+

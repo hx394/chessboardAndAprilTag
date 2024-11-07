@@ -279,16 +279,15 @@ Marked corners in the file [tag0corners.jpg].
 \end_layout
 
 \begin_layout Standard
-Estimated pose of camera is in [camera pose.txt].
+Estimated and optimized pose of camera is in [camera pose.txt].
 \end_layout
 
 \begin_layout Standard
-The codes for problem 2 are in [problem 2 part 1.py] and [problem2 part 2.py].
+The codes for problem 2 are in [problem 2 part 1.py] and [problem2 part 2.py]
 \end_layout
 
 \begin_layout Standard
-scratches files are my previous attempts,
- you can ignore them.
+and [problem2 part 3.py] .
 \end_layout
 
 \end_body

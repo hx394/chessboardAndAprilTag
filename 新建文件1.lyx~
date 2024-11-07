@@ -94,16 +94,16 @@ Mobile Robotics Homework 3
 Hongzhen Xu
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsection*
 Notes:
  Because gtsam and apriltag libraries cannot be installed on my windows machine,
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsection*
 this homework is finished with the virtual box linux os.
 \end_layout
 
-\begin_layout Standard
+\begin_layout Subsection*
 When you run the codes,
  please change the paths of the files in the code.
 \end_layout
