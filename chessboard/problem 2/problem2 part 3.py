@@ -6,11 +6,11 @@ import numpy as np
 import os
 
 R= [
-        0.998356, -0.0376212, 0.0432434,
-        -0.0349875, -0.997577, -0.0601261,
-        0.0454007, 0.0585143, -0.997254
+        1.0, 0.0, 0.0,
+        0.0, -1.0, 0.0,
+        0.0, 0.0, -1.0
 ]
-t=[  0.0135327, -0.0275992 , 0.0834204]
+t=[  0, 0 , 0.1]
 
 def X(i):
     return gtsam.symbol('x',i)
@@ -108,8 +108,8 @@ for i, (point_3D, point_2D) in enumerate(zip(points_3D, observed_2D)):
 #initial_estimate.insert(gtsam.symbol('x', 0), initial_pose)
 #print("graph:")
 #print(graph)
-print("initial estimate:")
-print(initial_estimate)
+#print("initial estimate:")
+#print(initial_estimate)
 #initial_error = graph.error(initial_estimate)
 #print("Initial error before optimization:", initial_error)
 # Optimize the factor graph using Levenberg-Marquardt optimizer
@@ -131,3 +131,4 @@ camera_pose = result.atPose3(X(0))
 print("Estimated camera pose relative to AprilTag:")
 print(camera_pose)
 
+print(optimizer.error())
