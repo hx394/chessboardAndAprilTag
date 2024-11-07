@@ -32,7 +32,7 @@ K = np.array([[fx,0,px],[0,fy,py],[0,0,1]],dtype=np.float32)
 
 # Camera intrinsic parameters (from calibration)
 camera_matrix = K
-dist_coeffs = np.zeros((4, 1))  # Assuming no lens distortion
+dist_coeffs = np.array([ 0.23165677, -0.91953127, -0.00321038 , 0.00515706,  1.25311778],dtype=np.float32)  
 
 # Estimate the pose using solvePnP
 success, rotation_vector, translation_vector = cv2.solvePnP(

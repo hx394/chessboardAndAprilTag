@@ -27,8 +27,8 @@ else:
             
             print("Corner coordinates (in image coordinates):")
             
-            for i, corner in enumerate(corners_2D):
-                print(f"Corner {(3-i)}: (x={corner[0]}, y={corner[1]})")
+            for i, corner in enumerate(corners_2D[::-1]):
+                print(f"Corner {i}: (x={corner[0]}, y={corner[1]})")
                 cv2.circle(image, (int(corner[0]), int(corner[1])), 10, (255, 0, 0), 5)
                 
             
