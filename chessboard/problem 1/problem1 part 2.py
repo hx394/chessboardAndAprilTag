@@ -10,13 +10,13 @@ square_size = 0.01  # each square is 1 cm (0.01 meters)
 object_points = np.zeros((chessboard_size[0] * chessboard_size[1], 3), np.float32)
 object_points[:, :2] = np.mgrid[0:chessboard_size[0], 0:chessboard_size[1]].T.reshape(-1, 2)
 object_points *= square_size
-
+#print(object_points)
 # Lists to store object points and image points from all images
 object_points_list = []  # 3D points in real world space
 image_points_list = []   # 2D points in image plane
 
 # Load images
-image_paths = glob.glob("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard/originals/*.JPEG")  # Update with the correct path
+image_paths = glob.glob("./chessboard/originals/*.JPEG")  # Update with the correct path
 
 # Loop over all images to detect chessboard corners
 for image_path in image_paths:
@@ -37,10 +37,11 @@ for image_path in image_paths:
         # Refine corner positions for more accuracy
         corners = cv2.cornerSubPix(gray, corners, (11, 11), (-1, -1),
                                    criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001))
-        
+        #print((cc[0],cc[1]) for cc in corners)
         # Add object points and image points
         object_points_list.append(object_points)
         image_points_list.append(corners)
+        print(image_points_list)
         
         # Draw and display the corners
         cv2.drawChessboardCorners(image, chessboard_size, corners, ret)
