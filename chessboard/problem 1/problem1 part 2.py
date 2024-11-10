@@ -22,6 +22,12 @@ image_paths = glob.glob("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard
 for image_path in image_paths:
     # Read image and convert to grayscale
     image = cv2.imread(image_path)
+    blurred=cv2.GaussianBlur(image,(5,5),0)
+
+    alpha=1.5
+
+    beta=0
+    image=cv2.convertScaleAbs(blurred,alpha=alpha,beta=beta)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
     # Find the chessboard corners

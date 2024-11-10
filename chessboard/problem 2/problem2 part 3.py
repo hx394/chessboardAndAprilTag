@@ -23,7 +23,7 @@ def P(k):
 print("Current working directory:", os.getcwd())
 
 # Load the calibration matrix from Problem 1 results
-fx, fy, s, px, py = 1467.34104, 1462.30880, 0, 545.234279, 943.926077  
+fx, fy, s, px, py = 1.46425299e+03, 1.45896397e+03, 0, 5.40797911e+02, 9.46673188e+02
 # Replace with your actual values from calibration
 
 # Initialize camera calibration in GTSAM

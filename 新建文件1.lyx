@@ -100,7 +100,7 @@ Notes:
 \end_layout
 
 \begin_layout Subsection*
-this homework is finished with the virtual box linux os.
+this homework is finished with the virtual box linux ubuntu os.
 \end_layout
 
 \begin_layout Subsection*
@@ -125,8 +125,7 @@ named [output_image(IMG_XXXX).jpg].
 \end_layout
 
 \begin_layout Standard
-IMG_3917 cannot be detected corners.
- The other 7 images succeed.
+All 8 images are detected with their corners.
 \end_layout
 
 \begin_layout Standard

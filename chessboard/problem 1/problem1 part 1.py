@@ -7,7 +7,14 @@ print("Current working directory:", os.getcwd())
 chessboard_size = (8, 6)
 
 # Load the image
-image = cv2.imread("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard/originals/IMG_3918.JPEG")
+image = cv2.imread("C:/Users/rain_/Desktop/chessboardAndAprilTag/chessboard/originals/IMG_3917.JPEG")
+
+blurred=cv2.GaussianBlur(image,(5,5),0)
+
+alpha=1.5
+
+beta=0
+image=cv2.convertScaleAbs(blurred,alpha=alpha,beta=beta)
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 

@@ -24,7 +24,7 @@ image_points = np.array([
 ], dtype=np.float32)
 
 # Load the calibration matrix from Problem 1 results
-fx, fy, s, px, py = 1467.34104, 1462.30880, 0, 545.234279, 943.926077  
+fx, fy, s, px, py = 1.46425299e+03, 1.45896397e+03, 0, 5.40797911e+02, 9.46673188e+02  
 # Replace with your actual values from calibration
 
 # Initialize camera calibration in GTSAM
@@ -32,7 +32,7 @@ K = np.array([[fx,0,px],[0,fy,py],[0,0,1]],dtype=np.float32)
 
 # Camera intrinsic parameters (from calibration)
 camera_matrix = K
-dist_coeffs = np.array([ 0.23165677, -0.91953127, -0.00321038 , 0.00515706,  1.25311778],dtype=np.float32)  
+dist_coeffs = np.array([0.24908392, -0.99844089, -0.00290131,  0.00389668,  1.07896648],dtype=np.float32)  
 
 # Estimate the pose using solvePnP
 success, rotation_vector, translation_vector = cv2.solvePnP(
