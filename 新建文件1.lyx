@@ -100,7 +100,7 @@ Notes:
 \end_layout
 
 \begin_layout Subsection*
-this homework is finished with the virtual box linux os.
+this homework is finished with the virtual box linux ubuntu os.
 \end_layout
 
 \begin_layout Subsection*
@@ -125,12 +125,42 @@ named [output_image(IMG_XXXX).jpg].
 \end_layout
 
 \begin_layout Standard
-IMG_3917 cannot be detected corners.
- The other 7 images succeed.
+All 8 images are detected with their corners.
+\end_layout
+
+\begin_layout Standard
+But for IMG_3917.JPEG,
+ Gaussian Blur is applied to reduce noise,
+ and I 
+\end_layout
+
+\begin_layout Standard
+increase contrast,
+ for the purpose of detecting corners.
+\end_layout
+
+\begin_layout Standard
+Therefore,
+ this image is not suitable for calculating camera calibration 
+\end_layout
+
+\begin_layout Standard
+because of loss of resolution and details.
+\end_layout
+
+\begin_layout Standard
+Therefore,
+ I use only 7 other images to calculate camera matrix.
 \end_layout
 
 \begin_layout Standard
 The codes for problem 1 are in [problem1 part 1.py] and [problem1 part 2.py] .
+\end_layout
+
+\begin_layout Standard
+Specifically,
+ the code for IMG_3917.JPEG is in [problem1 part 1 for 3917.py].
+ 
 \end_layout
 
 \begin_layout Standard
